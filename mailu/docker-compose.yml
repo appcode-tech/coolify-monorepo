@@ -14,23 +14,7 @@ services:
       - "/mailu/redis:/data"
 
   # Core services
-  front:
-    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.9}
-    restart: always    
-    logging:
-      driver: json-file
-    ports:
-      - "127.0.0.1:25:25"
-      - "127.0.0.1:465:465"
-      - "127.0.0.1:587:587"
-      - "127.0.0.1:110:110"
-      - "127.0.0.1:995:995"
-      - "127.0.0.1:143:143"
-      - "127.0.0.1:993:993"
-    volumes:
-      - "/mailu/certs:/certs"
-      - "/mailu/overrides/nginx:/overrides:ro"
-
+  
   admin:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}admin:${MAILU_VERSION:-1.9}
     restart: always
@@ -42,12 +26,10 @@ services:
 
   imap:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}dovecot:${MAILU_VERSION:-1.9}
-    restart: always    
+    restart: always
     volumes:
       - "/mailu/mail:/mail"
       - "/mailu/overrides/dovecot:/overrides:ro"
-    depends_on:
-      - front
 
   smtp:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}postfix:${MAILU_VERSION:-1.9}
@@ -55,8 +37,6 @@ services:
     volumes:
       - "/mailu/mailqueue:/queue"
       - "/mailu/overrides/postfix:/overrides:ro"
-    depends_on:
-      - front
 
   antispam:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}rspamd:${MAILU_VERSION:-1.9}
@@ -65,8 +45,6 @@ services:
     volumes:
       - "/mailu/filter:/var/lib/rspamd"
       - "/mailu/overrides/rspamd:/etc/rspamd/override.d:ro"
-    depends_on:
-      - front
 
   # Optional services
 
