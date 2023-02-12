@@ -12,9 +12,32 @@ services:
     restart: always
     volumes:
       - "/mailu/redis:/data"
+    depends_on:
+      - resolver
+    dns:
+      - 192.168.203.254
 
   # Core services
-  
+  front:
+    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.9}
+    restart: always
+    logging:
+      driver: json-file
+    volumes:
+      - "/mailu/certs:/certs"
+      - "/mailu/overrides/nginx:/overrides:ro"
+    depends_on:
+      - resolver
+    dns:
+      - 192.168.203.254
+
+  resolver:
+    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}unbound:${MAILU_VERSION:-1.9}
+    restart: always
+    networks:
+      default:
+        ipv4_address: 192.168.203.254
+
   admin:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}admin:${MAILU_VERSION:-1.9}
     restart: always
@@ -23,6 +46,9 @@ services:
       - "/mailu/dkim:/dkim"
     depends_on:
       - redis
+      - resolver
+    dns:
+      - 192.168.203.254
 
   imap:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}dovecot:${MAILU_VERSION:-1.9}
@@ -30,6 +56,11 @@ services:
     volumes:
       - "/mailu/mail:/mail"
       - "/mailu/overrides/dovecot:/overrides:ro"
+    depends_on:
+      - front
+      - resolver
+    dns:
+      - 192.168.203.254
 
   smtp:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}postfix:${MAILU_VERSION:-1.9}
@@ -37,6 +68,11 @@ services:
     volumes:
       - "/mailu/mailqueue:/queue"
       - "/mailu/overrides/postfix:/overrides:ro"
+    depends_on:
+      - front
+      - resolver
+    dns:
+      - 192.168.203.254
 
   antispam:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}rspamd:${MAILU_VERSION:-1.9}
@@ -45,6 +81,11 @@ services:
     volumes:
       - "/mailu/filter:/var/lib/rspamd"
       - "/mailu/overrides/rspamd:/etc/rspamd/override.d:ro"
+    depends_on:
+      - front
+      - resolver
+    dns:
+      - 192.168.203.254
 
   # Optional services
 
@@ -59,6 +100,9 @@ services:
       - "/mailu/overrides/roundcube:/overrides:ro"
     depends_on:
       - imap
+      - resolver
+    dns:
+      - 192.168.203.254
 
 networks:
   default:
