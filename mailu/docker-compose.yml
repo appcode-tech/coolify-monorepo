@@ -6,17 +6,6 @@ version: '2.2'
 
 services:
 
-  # External dependencies
-  redis:
-    image: redis:alpine
-    restart: always
-    volumes:
-      - "/mailu/redis:/data"
-    depends_on:
-      - resolver
-    dns:
-      - 172.16.15.254
-
   # Core services
   front:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.9}
