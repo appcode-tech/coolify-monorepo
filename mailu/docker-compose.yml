@@ -81,3 +81,11 @@ services:
       - "/mailu/overrides/roundcube:/overrides:ro"
     depends_on:
       - imap
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/20
