@@ -20,13 +20,13 @@ services:
     logging:
       driver: json-file
     ports:
-      - "25:25"
-      - "465:465"
-      - "587:587"
-      - "110:110"
-      - "995:995"
-      - "143:143"
-      - "993:993"
+      - "127.0.0.1:25:25"
+      - "127.0.0.1:465:465"
+      - "127.0.0.1:587:587"
+      - "127.0.0.1:110:110"
+      - "127.0.0.1:995:995"
+      - "127.0.0.1:143:143"
+      - "127.0.0.1:993:993"
     volumes:
       - "/mailu/certs:/certs"
       - "/mailu/overrides/nginx:/overrides:ro"
@@ -81,3 +81,11 @@ services:
       - "/mailu/overrides/roundcube:/overrides:ro"
     depends_on:
       - imap
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.0/20
