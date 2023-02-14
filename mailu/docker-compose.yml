@@ -62,10 +62,3 @@ services:
       - resolver
     dns:
       - 172.16.15.254
-
-networks:
-  mailu_net:
-    ipam:
-      driver: bridge
-      config:
-        - subnet: 172.16.0.0/20
