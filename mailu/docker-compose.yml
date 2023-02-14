@@ -34,7 +34,7 @@ services:
     env_file: mailu.env
     restart: always
     networks:
-      default:
+      mailu_net:
         ipv4_address: 172.16.15.254
 
   imap:
@@ -64,9 +64,8 @@ services:
       - 172.16.15.254
 
 networks:
-  default:
-    driver: bridge
+  mailu_net:
     ipam:
-      driver: default
+      driver: bridge
       config:
         - subnet: 172.16.0.0/20
