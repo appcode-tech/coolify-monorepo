@@ -2,7 +2,7 @@
 # Please read the documentation before attempting any change.
 # Generated for compose flavor
 
-version: '3.8'
+version: '3.9'
 
 services:
 
@@ -45,7 +45,7 @@ services:
     env_file: mailu.env
     restart: always
     networks:
-      default:
+      mailu_net:
         ipv4_address: 172.16.15.254
 
   admin:
@@ -120,7 +120,7 @@ services:
       - 172.16.15.254
 
 networks:
-  default:
+  mailu_net:
     driver: bridge
     ipam:
       driver: default
