@@ -18,6 +18,8 @@ services:
   unbound-dns:
     image: klutchell/unbound
     container_name: unbound-dns
+    ports:
+      - "53:53"
 
   # Core services
   front:
@@ -35,7 +37,7 @@ services:
       - "993:993"
     volumes:
       - "/mailu/certs:/certs"
-      - "/mailu/overrides/nginx:/overrides:ro"
+      - "/mailu/overrides/nginx:/overrides:ro"    
     dns:
       - unbound-dns
 
