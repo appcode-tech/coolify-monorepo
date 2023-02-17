@@ -13,7 +13,7 @@ services:
     volumes:
       - "/mailu/redis:/data"
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
   # Core services
   front:
@@ -33,7 +33,7 @@ services:
       - "/mailu/certs:/certs"
       - "/mailu/overrides/nginx:/overrides:ro"
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
   admin:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}admin:${MAILU_VERSION:-1.9}
@@ -44,7 +44,7 @@ services:
     depends_on:
       - redis
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
   imap:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}dovecot:${MAILU_VERSION:-1.9}
@@ -55,7 +55,7 @@ services:
     depends_on:
       - front
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
   smtp:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}postfix:${MAILU_VERSION:-1.9}
@@ -66,7 +66,7 @@ services:
     depends_on:
       - front
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
   antispam:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}rspamd:${MAILU_VERSION:-1.9}
@@ -78,7 +78,7 @@ services:
     depends_on:
       - front
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
   # Optional services
 
@@ -94,7 +94,7 @@ services:
     depends_on:
       - imap
     dns:
-      - 1.1.1.1
+      - cle7xojgs000cny9j9amttkuw
 
 networks:
   default:
