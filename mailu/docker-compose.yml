@@ -16,7 +16,7 @@ services:
       - unbound-dns
   
   unbound-dns:
-    image: unbound
+    image: klutchell/unbound
     container_name: unbound-dns
 
   # Core services
