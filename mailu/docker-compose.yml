@@ -12,14 +12,10 @@ services:
     restart: always
     volumes:
       - "/mailu/redis:/data"
+    depends_on:
+      - resolver
     dns:
-      - unbound-dns
-  
-  unbound-dns:
-    image: klutchell/unbound
-    container_name: unbound-dns
-    ports:
-      - "53:53"
+      - 172.16.31.254
 
   # Core services
   front:
@@ -33,13 +29,22 @@ services:
       - "587:587"
       - "110:110"
       - "995:995"
-      - "143:143"
+      - "143:143"1
       - "993:993"
     volumes:
       - "/mailu/certs:/certs"
-      - "/mailu/overrides/nginx:/overrides:ro"    
+      - "/mailu/overrides/nginx:/overrides:ro"
+    depends_on:
+      - resolver
     dns:
-      - unbound-dns
+      - 172.16.31.254
+
+  resolver:
+    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}unbound:${MAILU_VERSION:-1.9}
+    restart: always
+    networks:
+      default:
+        ipv4_address: 172.16.31.254
 
   admin:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}admin:${MAILU_VERSION:-1.9}
@@ -49,8 +54,9 @@ services:
       - "/mailu/dkim:/dkim"
     depends_on:
       - redis
+      - resolver
     dns:
-      - unbound-dns
+      - 172.16.31.254
 
   imap:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}dovecot:${MAILU_VERSION:-1.9}
@@ -60,8 +66,9 @@ services:
       - "/mailu/overrides/dovecot:/overrides:ro"
     depends_on:
       - front
+      - resolver
     dns:
-      - unbound-dns
+      - 172.16.31.254
 
   smtp:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}postfix:${MAILU_VERSION:-1.9}
@@ -71,8 +78,9 @@ services:
       - "/mailu/overrides/postfix:/overrides:ro"
     depends_on:
       - front
+      - resolver
     dns:
-      - unbound-dns
+      - 172.16.31.254
 
   antispam:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}rspamd:${MAILU_VERSION:-1.9}
@@ -83,11 +91,21 @@ services:
       - "/mailu/overrides/rspamd:/etc/rspamd/override.d:ro"
     depends_on:
       - front
+      - resolver
     dns:
-      - unbound-dns
+      - 172.16.31.254
 
   # Optional services
 
+  webdav:
+    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}radicale:${MAILU_VERSION:-1.9}
+    restart: always
+    volumes:
+      - "/mailu/dav:/data"
+    depends_on:
+      - resolver
+    dns:
+      - 172.16.31.254
 
 
   # Webmail
@@ -99,8 +117,9 @@ services:
       - "/mailu/overrides/roundcube:/overrides:ro"
     depends_on:
       - imap
+      - resolver
     dns:
-      - unbound-dns
+      - 172.16.31.254
 
 networks:
   default:
