@@ -12,10 +12,8 @@ services:
     restart: always
     volumes:
       - "/mailu/redis:/data"
-    depends_on:
-      - resolver
     dns:
-      - 172.16.31.254
+      - 1.1.1.1
 
   # Core services
   front:
@@ -34,17 +32,8 @@ services:
     volumes:
       - "/mailu/certs:/certs"
       - "/mailu/overrides/nginx:/overrides:ro"
-    depends_on:
-      - resolver
     dns:
-      - 172.16.31.254
-
-  resolver:
-    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}unbound:${MAILU_VERSION:-1.9}
-    restart: always
-    networks:
-      default:
-        ipv4_address: 172.16.31.254
+      - 1.1.1.1
 
   admin:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}admin:${MAILU_VERSION:-1.9}
@@ -54,9 +43,8 @@ services:
       - "/mailu/dkim:/dkim"
     depends_on:
       - redis
-      - resolver
     dns:
-      - 172.16.31.254
+      - 1.1.1.1
 
   imap:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}dovecot:${MAILU_VERSION:-1.9}
@@ -66,9 +54,8 @@ services:
       - "/mailu/overrides/dovecot:/overrides:ro"
     depends_on:
       - front
-      - resolver
     dns:
-      - 172.16.31.254
+      - 1.1.1.1
 
   smtp:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}postfix:${MAILU_VERSION:-1.9}
@@ -78,9 +65,8 @@ services:
       - "/mailu/overrides/postfix:/overrides:ro"
     depends_on:
       - front
-      - resolver
     dns:
-      - 172.16.31.254
+      - 1.1.1.1
 
   antispam:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}rspamd:${MAILU_VERSION:-1.9}
@@ -91,21 +77,11 @@ services:
       - "/mailu/overrides/rspamd:/etc/rspamd/override.d:ro"
     depends_on:
       - front
-      - resolver
     dns:
-      - 172.16.31.254
+      - 1.1.1.1
 
   # Optional services
 
-  webdav:
-    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}radicale:${MAILU_VERSION:-1.9}
-    restart: always
-    volumes:
-      - "/mailu/dav:/data"
-    depends_on:
-      - resolver
-    dns:
-      - 172.16.31.254
 
 
   # Webmail
@@ -117,9 +93,8 @@ services:
       - "/mailu/overrides/roundcube:/overrides:ro"
     depends_on:
       - imap
-      - resolver
     dns:
-      - 172.16.31.254
+      - 1.1.1.1
 
 networks:
   default:
@@ -127,4 +102,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.16.16.0/20
+        - subnet: 172.16.0.0/20
