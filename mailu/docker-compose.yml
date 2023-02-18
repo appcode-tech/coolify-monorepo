@@ -11,7 +11,7 @@ services:
     image: redis:alpine
     restart: always
     volumes:
-      - "/mailu/redis:/data"    
+      - "/mailu/redis:/data"
     dns:
       - 1.1.1.1
 
@@ -21,7 +21,7 @@ services:
     restart: always
     logging:
       driver: json-file
-    ports:
+    ports:      
       - "25:25"
       - "465:465"
       - "587:587"
@@ -31,7 +31,7 @@ services:
       - "993:993"
     volumes:
       - "/mailu/certs:/certs"
-      - "/mailu/overrides/nginx:/overrides:ro"    
+      - "/mailu/overrides/nginx:/overrides:ro"
     dns:
       - 1.1.1.1
 
@@ -85,7 +85,7 @@ services:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}clamav:${MAILU_VERSION:-1.9}
     restart: always
     volumes:
-      - "/mailu/filter:/data"    
+      - "/mailu/filter:/data"
     dns:
       - 1.1.1.1
 
@@ -93,7 +93,7 @@ services:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}radicale:${MAILU_VERSION:-1.9}
     restart: always
     volumes:
-      - "/mailu/dav:/data"    
+      - "/mailu/dav:/data"
     dns:
       - 1.1.1.1
 
