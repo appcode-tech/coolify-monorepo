@@ -13,8 +13,8 @@ services:
     volumes:
       - "/mailu/redis:/data"
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   # Core services
   front:
@@ -34,8 +34,8 @@ services:
       - "/mailu/certs:/certs"
       - "/mailu/overrides/nginx:/overrides:ro"
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   admin:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}admin:${MAILU_VERSION:-1.9}
@@ -46,8 +46,8 @@ services:
     depends_on:
       - redis
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   imap:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}dovecot:${MAILU_VERSION:-1.9}
@@ -58,8 +58,8 @@ services:
     depends_on:
       - front
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   smtp:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}postfix:${MAILU_VERSION:-1.9}
@@ -70,8 +70,8 @@ services:
     depends_on:
       - front
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   antispam:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}rspamd:${MAILU_VERSION:-1.9}
@@ -83,8 +83,8 @@ services:
     depends_on:
       - front
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   # Optional services
   antivirus:
@@ -93,8 +93,8 @@ services:
     volumes:
       - "/mailu/filter:/data"
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
   webdav:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}radicale:${MAILU_VERSION:-1.9}
@@ -102,8 +102,8 @@ services:
     volumes:
       - "/mailu/dav:/data"
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
 
   # Webmail
@@ -116,8 +116,8 @@ services:
     depends_on:
       - imap
     dns:
-      - 45.90.28.229
-      - 45.90.30.229
+      - 45.90.28.108
+      - 45.90.30.108
 
 networks:
   default:
